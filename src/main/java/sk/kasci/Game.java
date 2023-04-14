@@ -55,6 +55,7 @@ public class Game {
             case DOWN: this.cursor.move(0, 1); break;
             case LEFT: this.cursor.move(-1, 0); break;
             case RIGHT: this.cursor.move(1, 0); break;
+            case ADD_MINER: this.map.addMiner(this.cursor.getX(), this.cursor.getY());
         }
         map.generate(Map.chunkCoord(cursor.getX()), Map.chunkCoord(cursor.getY()));
     }

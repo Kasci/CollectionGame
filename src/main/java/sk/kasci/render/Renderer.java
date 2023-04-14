@@ -9,6 +9,7 @@ import sk.kasci.cursor.Cursor;
 import sk.kasci.map.Map;
 import sk.kasci.map.MapChunk;
 import sk.kasci.map.MapObject;
+import sk.kasci.map.object.ObjectType;
 
 public class Renderer {
 
@@ -41,16 +42,23 @@ public class Renderer {
             for (int x = 0; x < width; x++) {
                 TerminalPosition tmp = cursorPosition.minus(centerPosition).plus(new TerminalPosition(x,y));
                 MapObject object = map.getObject(tmp.getColumn(), tmp.getRow());
+                MapObject surfaceObject = map.getSurfaceObject(tmp.getColumn(), tmp.getRow());
 
                 TerminalPosition terminalPosition = new TerminalPosition(x, y).plus(offsetPosition);
-                g.setCharacter(terminalPosition, RenderFactory.factory(object));
+                if (surfaceObject.getType() != ObjectType.EMPTY) {
+                    g.setCharacter(terminalPosition, RenderFactory.factory(surfaceObject));
+                } else {
+                    g.setCharacter(terminalPosition, RenderFactory.factory(object));
+                }
             }
         }
 
         g.putString(new TerminalPosition(xOff + 2*size + 5, yOff), String.format("Cursor %2d, %2d", cursor.getX(), cursor.getY()));
 
         MapObject object = map.getObject(cursorPosition.getColumn(), cursorPosition.getRow());
-        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff + 20), String.format("Field %s", object));
+        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff + 2), String.format("Field %s %s %s", object.getType(), object.getColor(), object.getOrientation()));
+        MapObject surfaceObject = map.getSurfaceObject(cursorPosition.getColumn(), cursorPosition.getRow());
+        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff + 3), String.format("Surface %s %s %s", surfaceObject.getType(), surfaceObject.getColor(), surfaceObject.getOrientation()));
     }
 
 }

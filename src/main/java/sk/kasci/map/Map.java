@@ -30,7 +30,14 @@ public class Map {
         int X = chunkCoord(x);
         int Y = chunkCoord(y);
         MapChunk chunk = get(X, Y);
-        return chunk.getObject(x - (X*MapChunk.SIZE), x - (Y*MapChunk.SIZE));
+        return chunk.getObject(x - (X*MapChunk.SIZE), y - (Y*MapChunk.SIZE));
+    }
+
+    public MapObject getSurfaceObject(int x, int y) {
+        int X = chunkCoord(x);
+        int Y = chunkCoord(y);
+        MapChunk chunk = get(X, Y);
+        return chunk.getSurfaceObject(x - (X*MapChunk.SIZE), y - (Y*MapChunk.SIZE));
     }
 
     public void generate(int X, int Y) {
@@ -48,5 +55,12 @@ public class Map {
     public static int chunkCoord(int i) {
         if (i<0) return ((i+1) / MapChunk.SIZE) - 1;
         return i / MapChunk.SIZE;
+    }
+
+    public void addMiner(int x, int y) {
+        int X = chunkCoord(x);
+        int Y = chunkCoord(y);
+        MapChunk chunk = get(X, Y);
+        chunk.addMiner(x - (X*MapChunk.SIZE), y - (Y*MapChunk.SIZE));
     }
 }

@@ -28,6 +28,7 @@ public class InputHandler {
                 Character character = keyStroke.getCharacter();
                 switch (character) {
                     case 'q': return QUIT;
+                    case 'm': return ADD_MINER;
                     default: return NONE;
                 }
             }
