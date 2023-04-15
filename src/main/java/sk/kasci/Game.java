@@ -12,13 +12,20 @@ import sk.kasci.map.MapChunk;
 import sk.kasci.render.Renderer;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 import static sk.kasci.input.InputValue.*;
 
 public class Game {
 
+    private static final int FPS = 60;
+    private static final int REFRESH = 1000/FPS;
+
     private Screen screen;
     private TextGraphics textGraphics;
+
+    private Instant lastLoop;
 
     private Map map;
     private Cursor cursor;
@@ -32,6 +39,8 @@ public class Game {
         this.screen = screen;
         this.textGraphics = this.screen.newTextGraphics();
 
+        this.lastLoop = Instant.now();
+
         this.map = new Map();
         this.cursor = new Cursor();
 
@@ -42,9 +51,13 @@ public class Game {
     public void start() {
         this.running = true;
         while (running) {
-            render();
-            InputValue i = input();
-            update(i);
+            Instant now = Instant.now();
+            if (Duration.between(lastLoop, now).toMillis() > REFRESH) {
+                render();
+                InputValue i = input();
+                update(i);
+                this.lastLoop = now;
+            }
         }
     }
 
@@ -62,7 +75,7 @@ public class Game {
 
     private InputValue input() {
         try {
-            KeyStroke keyStroke = this.screen.readInput();
+            KeyStroke keyStroke = this.screen.pollInput();
             return this.inputHandler.handleInput(keyStroke);
         } catch (IOException e) {
             throw new RuntimeException(e);
