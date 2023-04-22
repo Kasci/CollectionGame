@@ -28,7 +28,9 @@ public class InputHandler {
                 Character character = keyStroke.getCharacter();
                 switch (character) {
                     case 'q': return QUIT;
+                    case 'd': return DELETE;
                     case 'm': return ADD_MINER;
+                    case 'p': return ADD_PIPE;
                     default: return NONE;
                 }
             }

@@ -1,13 +1,9 @@
-package sk.kasci.map.generator;
+package sk.kasci.map.utils;
 
 import sk.kasci.map.MapObject;
 import sk.kasci.map.object.ObjectColor;
 import sk.kasci.map.object.ObjectType;
 import sk.kasci.utils.PerlinNoise;
-
-import java.util.concurrent.BlockingDeque;
-
-import static sk.kasci.map.MapObject.*;
 
 public class MapGenerator {
 

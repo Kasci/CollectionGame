@@ -1,6 +1,6 @@
 package sk.kasci.map;
 
-import sk.kasci.map.generator.MapGenerator;
+import sk.kasci.map.utils.MapGenerator;
 import sk.kasci.map.object.ObjectColor;
 import sk.kasci.map.object.ObjectType;
 
@@ -26,6 +26,10 @@ public class MapChunk {
         return this.surface[y][x];
     }
 
+    public void setSurfaceObject(int x, int y, MapObject object) {
+        this.surface[y][x] = object;
+    }
+
     public boolean isDistanceGenerated() {
         return distanceGenerated;
     }
@@ -34,8 +38,17 @@ public class MapChunk {
         this.distanceGenerated = distanceGenerated;
     }
 
-    public void addMiner(int x, int y) {
-        ObjectColor c = getObject(x,y).getColor();
-        this.surface[y][x] = new MapObject(ObjectType.MINER, c);
+    public void update(int delta) {
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                MapObject o = this.surface[y][x];
+                o.update(delta);
+            }
+        }
     }
+
+    public void delete(int x, int y) {
+        this.surface[y][x] = new MapObject(ObjectType.EMPTY);
+    }
+
 }

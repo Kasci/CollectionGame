@@ -28,6 +28,13 @@ public class RenderFactory {
         switch (object.getType()) {
             case ORE: return '.';
             case MINER: return '@';
+            case PIPE: {
+                switch (object.getOrientation()) {
+                    case LEFT: case RIGHT: return '-';
+                    case UP: case DOWN: return '|';
+                    default: return '+';
+                }
+            }
             default: return ' ';
         }
     }

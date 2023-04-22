@@ -2,20 +2,17 @@ package sk.kasci;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import sk.kasci.cursor.Cursor;
 import sk.kasci.input.InputHandler;
 import sk.kasci.input.InputValue;
 import sk.kasci.map.Map;
-import sk.kasci.map.MapChunk;
+import sk.kasci.map.object.ObjectType;
 import sk.kasci.render.Renderer;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-
-import static sk.kasci.input.InputValue.*;
 
 public class Game {
 
@@ -52,25 +49,29 @@ public class Game {
         this.running = true;
         while (running) {
             Instant now = Instant.now();
-            if (Duration.between(lastLoop, now).toMillis() > REFRESH) {
+            long delta = Duration.between(lastLoop, now).toMillis();
+            if (delta > REFRESH) {
                 render();
                 InputValue i = input();
-                update(i);
+                update(i, (int) delta);
                 this.lastLoop = now;
             }
         }
     }
 
-    private void update(InputValue i) {
+    private void update(InputValue i, int delta) {
         switch (i) {
             case QUIT: this.running = false; break;
             case UP: this.cursor.move(0, -1); break;
             case DOWN: this.cursor.move(0, 1); break;
             case LEFT: this.cursor.move(-1, 0); break;
             case RIGHT: this.cursor.move(1, 0); break;
-            case ADD_MINER: this.map.addMiner(this.cursor.getX(), this.cursor.getY());
+            case DELETE: this.map.delete(this.cursor.getX(), this.cursor.getY()); break;
+            case ADD_MINER: this.map.addSurfaceObject(this.cursor.getX(), this.cursor.getY(), ObjectType.MINER); break;
+            case ADD_PIPE: this.map.addSurfaceObject(this.cursor.getX(), this.cursor.getY(), ObjectType.PIPE); break;
         }
-        map.generate(Map.chunkCoord(cursor.getX()), Map.chunkCoord(cursor.getY()));
+        map.generate(map.chunkCoord(cursor.getX()), map.chunkCoord(cursor.getY()));
+        map.update(delta);
     }
 
     private InputValue input() {

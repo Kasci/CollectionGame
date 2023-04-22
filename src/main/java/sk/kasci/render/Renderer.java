@@ -53,12 +53,18 @@ public class Renderer {
             }
         }
 
-        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff), String.format("Cursor %2d, %2d", cursor.getX(), cursor.getY()));
+        int infoX = xOff + 2*size + 5;
+        int infoY = yOff;
+        g.putString(new TerminalPosition(infoX, infoY), String.format("Cursor %2d, %2d", cursor.getX(), cursor.getY()));
 
         MapObject object = map.getObject(cursorPosition.getColumn(), cursorPosition.getRow());
-        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff + 2), String.format("Field %s %s %s", object.getType(), object.getColor(), object.getOrientation()));
+        g.putString(new TerminalPosition(infoX, infoY + 2), String.format("Field %s %s %s", object.getType(), object.getColor(), object.getOrientation()));
         MapObject surfaceObject = map.getSurfaceObject(cursorPosition.getColumn(), cursorPosition.getRow());
-        g.putString(new TerminalPosition(xOff + 2*size + 5, yOff + 3), String.format("Surface %s %s %s", surfaceObject.getType(), surfaceObject.getColor(), surfaceObject.getOrientation()));
+        g.putString(new TerminalPosition(infoX, infoY + 3), String.format("Surface %s %s %s", surfaceObject.getType(), surfaceObject.getColor(), surfaceObject.getOrientation()));
+        if (surfaceObject.getEntity() != null) {
+            g.putString(new TerminalPosition(infoX, infoY + 5), String.format("Capacity %d", surfaceObject.getEntity().getCapacity()));
+        }
+
     }
 
 }

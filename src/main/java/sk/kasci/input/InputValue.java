@@ -4,5 +4,6 @@ public enum InputValue {
     NONE, QUIT,
     UP, DOWN, LEFT, RIGHT,
 
-    ADD_MINER
+    DELETE,
+    ADD_MINER, ADD_PIPE
 }
